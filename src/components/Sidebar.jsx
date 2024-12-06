@@ -1,46 +1,24 @@
 import React from "react";
-import Button from "./Button";
 
-function Sidebar({ isOpen, toggleSidebar, navigate }) {
+function Sidebar({ isOpen, toggleSidebar }) {
   return (
     <aside
-      className={`bg-blue-900 text-white min-h-screen p-4 w-[20%] transition-transform ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
+      className={`fixed top-0 right-0 h-full w-64 bg-blue-900 text-white shadow-lg transition-transform duration-300 ${
+        isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-     
-      <ul>
-        <li>
-          <Button
-            onClick={() => navigate("/home")}
-            className="w-full bg-red-500 mb-4"
-          >
-            الصفحة الرئيسية
-          </Button>
+      <ul className="mt-20 space-y-4 px-4">
+        <li className="cursor-pointer p-4 hover:bg-blue-800 rounded-lg font-bold text-2xl">
+          الصفحة الرئيسية
         </li>
-        <li>
-          <Button
-            onClick={() => navigate("/categories")}
-            className="w-full bg-blue-800 mb-2"
-          >
-            الفئات
-          </Button>
+        <li className="cursor-pointer p-4 hover:bg-blue-800 rounded-lg font-bold text-xl">
+          الفئات
         </li>
-        <li>
-          <Button
-            onClick={() => navigate("/products")}
-            className="w-full bg-blue-800 mb-2"
-          >
-            المنتجات
-          </Button>
+        <li className="cursor-pointer p-4 hover:bg-blue-800 rounded-lg font-bold text-xl">
+          المنتجات
         </li>
-        <li>
-          <Button
-            onClick={() => navigate("/invoices")}
-            className="w-full bg-blue-800"
-          >
-            الفواتير
-          </Button>
+        <li className="cursor-pointer p-4 hover:bg-blue-800 rounded-lg font-bold text-xl">
+          الفواتير
         </li>
       </ul>
     </aside>

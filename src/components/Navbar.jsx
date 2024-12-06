@@ -1,43 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FiMenu, FiChevronDown, FiLogOut } from "react-icons/fi";
 
 function Navbar({ user, logout, toggleSidebar }) {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-blue-900 text-white p-4 flex justify-between items-center relative">
-      {/* زر القائمة الجانبية */}
+    <nav className="w-full bg-blue-900 shadow-lg text-white p-4 flex justify-between items-center  pl-20">
       <button
         onClick={toggleSidebar}
-        className="text-white material-icons cursor-pointer focus:outline-none"
+        className="text-white text-2xl focus:outline-none"
+        aria-label="Toggle Sidebar"
       >
-        menu
+        <FiMenu size={30} />
       </button>
-
-      {/* عنوان النظام */}
       <h1 className="text-xl font-bold">نظام إدارة المخازن</h1>
-
-      {/* القائمة المنسدلة */}
       <div className="relative">
         <button
           className="flex items-center gap-2 focus:outline-none"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)}
         >
-          <span>{user?.name}</span>
-          <span className="material-icons">▼</span>
+          <span className="text-lg">{user?.name}</span>
+          <FiChevronDown size={30} />
         </button>
         {menuOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded">
-            <p className="p-4 border-b text-sm">{user?.email}</p>
+          <div className="absolute left-2 mt-2 bg-white text-black shadow-lg rounded">
+            <p className="p-6 border-b text-xl font-bold">{user?.email}</p>
             <button
-              onClick={() => {
-                logout();
-                navigate("/");
-              }}
-              className="w-full text-left p-4 text-red-500 hover:bg-gray-100 flex items-center gap-2"
+              onClick={logout}
+              className="w-full text-left text-xl font-bold p-6 text-red-500 hover:bg-gray-100 flex items-center justify-between"
             >
-              <span className="material-icons">logout</span> تسجيل الخروج
+              تسجيل الخروج
+               <FiLogOut size={30} />
             </button>
           </div>
         )}

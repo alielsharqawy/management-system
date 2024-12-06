@@ -1,13 +1,58 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import { getCategories, getProducts, getInvoices } from "../api/resources";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import {
+  FiBox,
+  FiTag,
+  FiFileText,
+  FiDollarSign,
+  FiBarChart2,
+  FiTrendingUp,
+} from "react-icons/fi";
+
+const STAT_CARDS = [
+  {
+    id: "categories",
+    title: "الفئات الإجمالي",
+    icon: <FiTag />,
+    color: "text-blue-500",
+  },
+  {
+    id: "products",
+    title: "المنتجات الإجمالي",
+    icon: <FiBox />,
+    color: "text-green-500",
+  },
+  {
+    id: "invoices",
+    title: "الفواتير الإجمالي",
+    icon: <FiFileText />,
+    color: "text-yellow-500",
+  },
+  {
+    id: "totalRevenue",
+    title: "الإيرادات الإجمالي",
+    icon: <FiDollarSign />,
+    color: "text-purple-500",
+  },
+  {
+    id: "todayRevenue",
+    title: "الإيرادات اليوم",
+    icon: <FiBarChart2 />,
+    color: "text-red-500",
+  },
+  {
+    id: "averageRevenue",
+    title: "الإيرادات المتوسطة",
+    icon: <FiTrendingUp />,
+    color: "text-indigo-500",
+  },
+];
 
 function HomePage() {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [stats, setStats] = useState({
     categories: 0,
@@ -35,8 +80,8 @@ function HomePage() {
             (sum, invoice) => sum + invoice.total,
             0
           ),
-          todayRevenue: 0, // Placeholder for today's revenue
-          averageRevenue: 0, // Placeholder for average revenue
+          todayRevenue: 0,
+          averageRevenue: 0,
         });
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -46,68 +91,50 @@ function HomePage() {
     fetchStats();
   }, []);
 
+  const renderStatCard = (stat) => (
+    <div
+      key={stat.id}
+      className="bg-white shadow-lg rounded-lg p-6 flex items-center gap-4"
+    >
+      <div className={`text-4xl ${stat.color}`}>{stat.icon}</div>
+      <div>
+        <h3 className="text-xl font-semibold text-gray-700">{stat.title}</h3>
+        <p className="text-3xl font-bold text-gray-900">
+          {stat.id.includes("Revenue") ? `$${stats[stat.id]}` : stats[stat.id]}
+        </p>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-100" dir="rtl">
       {/* Sidebar */}
-      {sidebarOpen && (
-        <Sidebar
-          isOpen={sidebarOpen}
-          toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          navigate={navigate}
-        />
-      )}
+      <Sidebar
+        isOpen={sidebarOpen}
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+      />
 
       {/* Main Content */}
-      <div className="flex-1">
-        {/* Navbar */}
-        <Navbar user={user} logout={logout} />
-
-        <div className="p-6 bg-gray-100">
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ${
+          sidebarOpen ? "mr-64" : "mr-0"
+        }`}
+      >
+        <Navbar
+          user={user}
+          logout={logout}
+          toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        />
+        <div className="p-6">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-            {/* Same Stats Cards as Before */}
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-blue-500">
-                الفئات الإجمالي
-              </h2>
-              <p className="text-3xl">{stats.categories}</p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-green-500">
-                المنتجات الإجمالي
-              </h2>
-              <p className="text-3xl">{stats.products}</p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-yellow-500">
-                الفواتير الإجمالي
-              </h2>
-              <p className="text-3xl">{stats.invoices}</p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-purple-500">
-                الإيرادات الإجمالي
-              </h2>
-              <p className="text-3xl">${stats.totalRevenue}</p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-red-500">
-                الإيرادات اليوم
-              </h2>
-              <p className="text-3xl">${stats.todayRevenue}</p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-4 text-center">
-              <h2 className="text-xl font-bold text-indigo-500">
-                الإيرادات المتوسطة
-              </h2>
-              <p className="text-3xl">${stats.averageRevenue}</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {STAT_CARDS.map(renderStatCard)}
           </div>
 
-          {/* Placeholder for Revenue Chart */}
-          <div className="bg-white shadow rounded-lg p-6 mt-6">
-            <h2 className="text-xl font-bold mb-4">الإيرادات (آخر 7 أيام)</h2>
-            <div className="h-48 flex items-center justify-center">
+          {/* Revenue Chart Section */}
+          <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+            <h2 className="text-2xl font-bold mb-4">الإيرادات (آخر 7 أيام)</h2>
+            <div className="h-64 flex items-center justify-center bg-gray-50">
               <p>Placeholder for Revenue Chart</p>
             </div>
           </div>
