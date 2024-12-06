@@ -2,27 +2,27 @@ import axios from "axios";
 
 const API_URL = "https://warehouse.al-mosa.com/api";
 
-// تسجيل الدخول
+// Login API
 export const login = async (email, password) => {
   return axios.post(`${API_URL}/login`, { email, password });
 };
 
-// إنشاء حساب
+// Register API
 export const register = async (data) => {
   return axios.post(`${API_URL}/register`, data);
 };
 
-// نسيت كلمة المرور
+// Forgot Password API
 export const forgotPassword = async (email) => {
   return axios.post(`${API_URL}/forgot-password`, { email });
 };
 
-// إعادة تعيين كلمة المرور
+// Reset Password API
 export const resetPassword = async (data) => {
   return axios.post(`${API_URL}/reset-password`, data);
 };
 
-// تأكيد البريد الإلكتروني
+// Verify Email API
 export const verifyEmail = async (data) => {
   return axios.post(`${API_URL}/verify-email`, data);
 };

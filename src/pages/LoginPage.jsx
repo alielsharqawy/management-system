@@ -8,17 +8,18 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await login(email, password);
+    console.log("Response Data:", response.data); // عرض البيانات
+    localStorage.setItem("user", JSON.stringify(response.data));
+    navigate("/home");
+  } catch (error) {
+    alert("فشل تسجيل الدخول. تحقق من البيانات.");
+  }
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await login(email, password);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      navigate("/home");
-    } catch (error) {
-      alert("فشل تسجيل الدخول. تحقق من البيانات.");
-    }
-  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
