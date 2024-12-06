@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { register } from "../api/auth";
 
 function RegisterPage() {
@@ -20,10 +20,10 @@ function RegisterPage() {
     e.preventDefault();
     try {
       await register(formData);
-      alert("Account created successfully!");
-      navigate("/");
+      alert("تم إنشاء الحساب بنجاح. يُرجى تأكيد البريد الإلكتروني.");
+      navigate("/verify-email", { state: { email: formData.email } }); // التوجيه إلى صفحة التحقق
     } catch (error) {
-      alert("Registration failed");
+      alert("فشل إنشاء الحساب. حاول مرة أخرى.");
     }
   };
 
@@ -51,11 +51,6 @@ function RegisterPage() {
             إنشاء حساب
           </button>
         </form>
-        <div className="text-center mt-4">
-          <Link to="/" className="text-blue-500">
-            لديك حساب؟ تسجيل الدخول
-          </Link>
-        </div>
       </div>
     </div>
   );

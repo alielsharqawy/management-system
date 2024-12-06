@@ -17,3 +17,6 @@ export const forgotPassword = async (email) => {
 export const resetPassword = async (data) => {
   return axios.post(`${API_URL}/reset-password`, data);
 };
+export const verifyEmail = async (data) => {
+  return axios.post("https://warehouse.al-mosa.com/api/verify-email", data);
+};
