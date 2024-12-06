@@ -1,26 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
+import Button from "../components/Button";
 
 function HomePage() {
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    logout();
     navigate("/");
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
         <h1 className="text-3xl font-bold mb-4">مرحبًا بك</h1>
-        <p className="text-lg mb-6">{user?.name}</p>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
-        >
+        <p className="text-lg mb-6">مرحبًا، {user?.name}</p>
+        <Button onClick={handleLogout} className="w-full bg-red-500">
           تسجيل الخروج
-        </button>
+        </Button>
       </div>
     </div>
   );

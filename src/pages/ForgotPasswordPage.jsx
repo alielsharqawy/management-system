@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../api/auth";
+import InputField from "../components/InputField";
+import Button from "../components/Button";
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -9,12 +11,11 @@ function ForgotPasswordPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await forgotPassword(email); // إرسال البريد الإلكتروني للـ API
-      alert("تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني");
-      // التوجيه إلى صفحة إعادة التعيين
+      await forgotPassword(email);
+      alert("تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني.");
       navigate("/reset-password", { state: { email } });
     } catch (error) {
-      alert("فشل إرسال رمز إعادة التعيين");
+      alert("فشل إرسال رمز إعادة التعيين. حاول مرة أخرى.");
     }
   };
 
@@ -25,19 +26,17 @@ function ForgotPasswordPage() {
           نسيت كلمة المرور
         </h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">البريد الإلكتروني</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none"
-              required
-            />
-          </div>
-          <button className="w-full bg-blue-500 text-white py-2 rounded-lg">
+          <InputField
+            label="البريد الإلكتروني"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="أدخل بريدك الإلكتروني"
+            type="email"
+            required
+          />
+          <Button type="submit" className="w-full">
             إرسال رمز إعادة التعيين
-          </button>
+          </Button>
         </form>
       </div>
     </div>
